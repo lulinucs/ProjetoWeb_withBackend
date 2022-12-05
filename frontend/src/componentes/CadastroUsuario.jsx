@@ -11,8 +11,6 @@ export default (props) => {
         }));
     };
 
-
-
     function CadastrarUsuario() {
         Axios.post("http://localhost:8081/cadastrousuario", {
             nome: values.nome,
@@ -24,6 +22,14 @@ export default (props) => {
             console.log("resposta:" + response);
         })
     };
+
+    //Só para debug do DB
+    function MostrarUsuarios() {
+        Axios.post("http://localhost:8081/mostrarusuarios",
+        ).then((response) => {
+            console.log("resposta:" + response);
+        })
+    }
 
 
     return (
@@ -40,6 +46,7 @@ export default (props) => {
             <input type="text" name="telefone" onChange={handleChangeValues}/>
             <br/>
             <button onClick={() => CadastrarUsuario()}>Cadastrar</button>
+            <button onClick={() => MostrarUsuarios()}>Print</button>
         </>
     );
 };
