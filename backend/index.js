@@ -67,9 +67,12 @@ app.post("/mostrareventos", async (req, res) => {
 
 app.post("/cadastroevento", (req, res) => {
     const { nomeEvento }  = req.body;
+    const { data }  = req.body;
+    const { horario }  = req.body;
     const { descricao }  = req.body;
     const { cargaHoraria }  = req.body;
     const { remuneracao }  = req.body;
+    const { setor } = req.body;
  
     try {
         const res = client.connect();
@@ -79,8 +82,26 @@ app.post("/cadastroevento", (req, res) => {
     }
 
     const collection = client.db('teste-db').collection('events');
-    collection.insertOne({nomeEvento: nomeEvento, descricao: descricao, cargaHoraria:cargaHoraria, remuneracao: remuneracao})
-    console.log({nomeEvento: nomeEvento, descricao: descricao, cargaHoraria:cargaHoraria, remuneracao: remuneracao});
+    collection.insertOne({nomeEvento: nomeEvento,
+                            data: data,
+                            horario: horario, 
+                            descricao: descricao, 
+                            cargaHoraria:cargaHoraria, 
+                            remuneracao: remuneracao,
+                            setor: setor})
+    console.log({nomeEvento: nomeEvento,
+                data: data,
+                horario: horario, 
+                descricao: descricao, 
+                cargaHoraria:cargaHoraria, 
+                remuneracao: remuneracao,
+                setor: setor});
+})
+
+app.get("/listaeventos", async (req, res) => {
+    const eventos = await client.db("teste-db").collection("events").find().toArray();
+    res.send(eventos);
+
 })
 
 app.listen(8081, async function(){

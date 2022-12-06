@@ -14,9 +14,12 @@ export default (props) => {
     function CadastrarEvento() {
         Axios.post("http://localhost:8081/cadastroevento", {
             nomeEvento: values.nomeEvento,
+            data: values.data,
+            horario: values.horario,
             descricao: values.descricao,
             cargaHoraria: values.cargaHoraria,
-            remuneracao: values.remuneracao
+            remuneracao: values.remuneracao,
+            setor: values.setor
         }).then((response) => {
             console.log("resposta:" + response);
         })
@@ -34,12 +37,25 @@ export default (props) => {
         <>            
             <h5>Nome do evento: </h5>
             <input type="text" name="nomeEvento" onChange={handleChangeValues}/>
+
+            <h5>Data: </h5>
+            <input type="text" name="data" onChange={handleChangeValues}/>
+
+            <h5>Horário: </h5>
+            <input type="text" name="horario" onChange={handleChangeValues}/>
+
             <h5>Descrição: </h5>
             <input type="text" name="descricao" onChange={handleChangeValues}/>
+            
             <h5>Carga horária: </h5>
             <input type="text" name="cargaHoraria" onChange={handleChangeValues}/>
+            
             <h5>Remuneração: </h5>
             <input type="text" name="remuneracao" onChange={handleChangeValues}/>
+
+            <h5>Setor: </h5>
+            <input type="text" name="setor" onChange={handleChangeValues}/>
+
             <br/>
             <button onClick={() => CadastrarEvento()}>Cadastrar</button>
             <button onClick={() => MostrarEventos()}>Print</button>

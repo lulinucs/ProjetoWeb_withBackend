@@ -1,21 +1,34 @@
 import React from "react";
-import eventos from "../data/eventos";
+//import eventos from "../data/eventos";
 import produtos from '../data/eventos'
 import CardEvento from './layout/CardEvento.jsx'
+import Axios from "axios";
 
-function getEventos() {
-    return eventos.map(event => {
-        return <CardEvento nome={event.nome} data={event.data} hora={event.hora} cargahoraria={event.cargahoraria} remuneracao={event.remuneracao} setor={event.setor}>
-            {event.descricao}
-        </CardEvento>
-    })
-}
+export default class ListaEventos extends React.Component {
+    state = {
+        eventos: []
+    }
 
-export default props => {
-    return (
-        <div>
+    componentDidMount() {
+        Axios.get("http://localhost:8081/listaeventos")
+        .then((response) => {
+                const eventos = response.data
+                this.setState({eventos});
+        });
+    }
+
+    render() {
+        return (
+            <div>
             <h2>Próximos Eventos</h2>
-                {getEventos()}
-        </div>
-    )
+                {
+                    this.state.eventos.map(evento =>
+                        <CardEvento nomeEvento={evento.nomeEvento} data={evento.data} horario={evento.horario} cargaHoraria={evento.cargaHoraria} remuneracao={evento.remuneracao} setor={evento.setor}>
+                            {evento.descricao}
+                        </CardEvento>
+                    )
+                }
+            </div>
+        )
+    }
 }
