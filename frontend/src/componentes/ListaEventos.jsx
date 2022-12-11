@@ -1,6 +1,5 @@
 import React from "react";
 //import eventos from "../data/eventos";
-import produtos from '../data/eventos'
 import CardEvento from './layout/CardEvento.jsx'
 import Axios from "axios";
 

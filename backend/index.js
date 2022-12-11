@@ -36,6 +36,11 @@ app.post("/cadastrousuario", (req, res) => {
     const { CPF }  = req.body;
     const { nascimento }  = req.body;
     const { telefone }  = req.body;
+    const { sobre }  = req.body;
+    const { email }  = req.body;
+    const { imageUrl }  = req.body;
+    const { tokenId }  = req.body;
+    const { type } = req.body
  
     try {
         const res = client.connect();
@@ -45,8 +50,8 @@ app.post("/cadastrousuario", (req, res) => {
     }
 
     const collection = client.db('teste-db').collection('users');
-    collection.insertOne({nome: nome, pronome: pronome, CPF:CPF, nascimento: nascimento, telefone:telefone})
-    console.log({nome: nome, pronome: pronome, CPF:CPF, nascimento: nascimento, telefone:telefone})
+    collection.insertOne({nome: nome, pronome: pronome, CPF:CPF, nascimento: nascimento, telefone:telefone, sobre:sobre, email:email, imageUrl:imageUrl, tokenId:tokenId, type:type})
+    console.log({nome: nome, pronome: pronome, CPF:CPF, nascimento: nascimento, telefone:telefone, sobre:sobre, email:email, imageUrl:imageUrl, tokenId:tokenId, type:type})
 })
 
 app.post("/mostrarusuarios", async (req, res) => {
@@ -100,6 +105,12 @@ app.post("/cadastroevento", (req, res) => {
 
 app.get("/listaeventos", async (req, res) => {
     const eventos = await client.db("teste-db").collection("events").find().toArray();
+    res.send(eventos);
+
+})
+
+app.get("/listacandidatos", async (req, res) => {
+    const eventos = await client.db("teste-db").collection("users").find().toArray();
     res.send(eventos);
 
 })
