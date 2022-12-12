@@ -2,23 +2,25 @@ const express = require("express");
 const app = express();
 const cors = require("cors")
 
-const {MongoClient, ExplainVerbosity} = require('mongodb');
+const {MongoClient, ExplainVerbosity, ObjectId} = require('mongodb');
 const DB_NAME = 'teste-db';
 const MONGO_URL = 'mongodb://0.0.0.0/27017/${DB_NAME}';
 var client = new MongoClient(MONGO_URL, {useUnifiedTopology: true});
 
 async function initializeDB() {
     try {
-        client.db("teste-db").createCollection(users);
+        client.db("teste-db").createCollection("users");
         console.log("Coleção users criada")
     } catch (e) {
+        console.log(e)
         console.log("Coleção users já existe");
     }
 
     try {
-        client.db("teste-db").createCollection(events);
+        client.db("teste-db").createCollection("events");
         console.log("Coleção events criada")
     } catch (e) {
+        console.log(e)
         console.log("Coleção events já existe");
     }
 }
@@ -79,6 +81,8 @@ app.post("/cadastroevento", (req, res) => {
     const { remuneracao }  = req.body;
     const { setor } = req.body;
     const { googleId } = req.body;
+    console.log("GOOGLE ID: ")
+    console.log(googleId)
 
  
     try {
@@ -110,6 +114,7 @@ app.post("/cadastroevento", (req, res) => {
 
 app.get("/listaeventos", async (req, res) => {
     const eventos = await client.db("teste-db").collection("events").find().toArray();
+    console.log(eventos);
     res.send(eventos);
 
 })
@@ -136,11 +141,16 @@ app.post("/cadastrar", async (req, res) => {
     const imageUrl = req.body.profileObj.imageUrl
     
     const usuarios = client.db('teste-db').collection('users');
-    usuarios.insertOne({googleId:googleId, email:email, givenName:givenName, familyName:familyName, imageUrl:imageUrl})
-    console.log("Usuario "+givenName+" cadastrado!")
-
-
-    res.send(googleId)
+    const found = await usuarios.find({googleId : googleId}).toArray();
+    if (found.length == 0) {
+        usuarios.insertOne({googleId:googleId, email:email, givenName:givenName, familyName:familyName, imageUrl:imageUrl})
+        console.log("Usuario "+givenName+" cadastrado!")
+    } else {
+        console.log("Usuario "+givenName+" logado!")
+    }
+    console.log("ID: ")
+    console.log(googleId)
+    res.send({googleId: googleId})
 })
 
 app.post("/candidatarse", async (req, res) => {
@@ -161,8 +171,29 @@ app.post("/candidatarse", async (req, res) => {
     
 })
 
+app.post("/candidatosNoEvento", async (req, res) => {
+    const id = req.body.eventoId;
+    console.log(id);
+    const o_id = new ObjectId(id);
+    const evento = await client.db('teste-db').collection('events').findOne({_id: o_id});
+    const candIds = evento.candidatos;
+    console.log(candIds)
+    let candidatos = [];
+    for (const cId of candIds) {
+        console.log("CID:")
+        console.log(cId)
+        const cand = await client.db('teste-db').collection('users').findOne({googleId: cId});
+        console.log("CANDIDATO FOR LOOP:")
+        console.log(cand)
+        candidatos.push(cand);
+    }
+    console.log("CANDIDATOS:")
+    console.log(candidatos);
+    res.send({lista: candidatos})
+})
+
 
 app.listen(8081, async function(){
-    const resultInitDB = await initializeDB();
+    //const resultInitDB = await initializeDB();
     console.log("Servidor rodando na porta 8081");
 });

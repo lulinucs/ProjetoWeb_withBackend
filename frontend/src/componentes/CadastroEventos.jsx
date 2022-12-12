@@ -12,6 +12,8 @@ export default (props) => {
     };
 
     function CadastrarEvento() {
+        console.log("ID: ")
+        console.log(props.googleId)
         Axios.post("http://localhost:8081/cadastroevento", {
             nomeEvento: values.nomeEvento,
             data: values.data,

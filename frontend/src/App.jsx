@@ -23,9 +23,11 @@ export default function App() {
 
 	function login(googleData){
 		Axios.post("http://localhost:8081/cadastrar", googleData).then((response) => {
+			console.log("RESPONSE CADASTRO: ")	
 			console.log(response)
-			console.log(response.data)
-			setGoogleId(response.data)
+			console.log(response.data.googleId)
+			setGoogleId(response.data.googleId)
+			console.log(admin);
 		})
 	}
 
@@ -33,6 +35,15 @@ export default function App() {
 		login(response)
 		console.log(response)
 	};
+
+	const handleChange = event => {
+		if (event.target.checked) {
+			console.log("checkbox true");
+		} else {
+			console.log("checkbox false");
+		}
+		setAdmin(current => !current);
+	}
 
 
 	return(
@@ -43,11 +54,11 @@ export default function App() {
 			
 			(admin ? (<Admin googleId={googleId} admin={admin}/>) : (<Staff googleId={googleId}/>)
 
-) : (
+			) : (
 		
 			<Card titulo="Login">
 
-					<input type="checkbox" />
+					<input type="checkbox" id="checkAdmin" value={admin} onChange={handleChange}/>
 					<h5>Logar como produtor</h5>
 
 				<GoogleLogin 

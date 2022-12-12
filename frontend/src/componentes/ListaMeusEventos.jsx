@@ -3,30 +3,48 @@ import React from "react";
 import CardEvento from './layout/CardEvento.jsx'
 import Axios from "axios";
 
-
+async function getCandidatos(evento) {
+    console.log("ID EVENTO:")
+    console.log(evento._id)
+    const res = await Axios.post("http://localhost:8081/candidatosNoEvento",
+                {eventoId: evento._id});
+    const lista = res.data;
+    console.log("CANDIDATOS RECEBIDOS:")
+    console.log(lista)
+    return lista
+}
 
 export default class ListaEventos extends React.Component {
     state = {
-        meusEventos: []
+        meusEventos: [],
+        candidatosPorEvento: []
     }
 
+    async componentDidMount() {
+        const response = await Axios.get("http://localhost:8081/listaeventos")
+        const eventos = response.data
+        const meusEventos = eventos.filter(evento => (evento.googleId == this.props.googleId))
+        console.log("MEUS EVENTOS")
+        console.log(meusEventos)
+        console.log(this.props.googleId)
+        for (const evento of meusEventos) {
+            console.log("EVENTO LOOP: ")
+            console.log(evento)
+            const cands = await getCandidatos(evento);
+            const nomes = cands.map(cand => cand.givenName + " " + cand.familyName)
+            evento.candidatos = nomes;
+        }
 
+        this.setState({meusEventos: meusEventos});
+        console.log("ESTADO: ")
+        console.log(this.state.meusEventos)
 
-    componentDidMount() {
-        Axios.get("http://localhost:8081/listaeventos")
-        .then((response) => {
-                const eventos = response.data
-                const meusEventos = eventos.filter(evento => (evento.googleId == this.props.googleId))
-                console.log(meusEventos)
-
-                this.setState({meusEventos});
-
-
-        });
-
+        //const lista = await Promise.all(meusEventos.map(async (evento) => await getCandidatos(evento)))
+        //console.log("LISTA EVENTOS:")
+        //console.log(lista)
+        //this.setState({candidatosPorEvento: lista})
 
     }
-
 
     render() {
         return (
@@ -37,6 +55,9 @@ export default class ListaEventos extends React.Component {
                         <CardEvento admin={this.props.admin} nomeEvento={evento.nomeEvento} data={evento.data} horario={evento.horario} cargaHoraria={evento.cargaHoraria} remuneracao={evento.remuneracao} setor={evento.setor}>
                             {evento.descricao}
                             <h5>Candidatos</h5>
+                            <ul>
+                                {evento.candidatos.map(cand => <li>{cand}</li>)}
+                            </ul>
 
                         </CardEvento>
                     )
