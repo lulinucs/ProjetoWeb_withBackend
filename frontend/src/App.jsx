@@ -19,7 +19,7 @@ import Axios from "axios";
 export default function App() {
 
 	var [googleId, setGoogleId] = useState(false)
-	var [admin, setAdmin] = useState(true)
+	var [admin, setAdmin] = useState(false)
 
 	function login(googleData){
 		Axios.post("http://localhost:8081/cadastrar", googleData).then((response) => {

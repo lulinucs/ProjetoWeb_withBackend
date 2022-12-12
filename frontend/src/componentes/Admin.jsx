@@ -7,6 +7,7 @@ import Card from './layout/Card.jsx'
 import ListaMeusEventos from './ListaMeusEventos.jsx'
 import CadastroEventos from './CadastroEventos'
 
+
 export default (props) => {
 	
 
