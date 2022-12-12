@@ -19,7 +19,8 @@ export default (props) => {
             descricao: values.descricao,
             cargaHoraria: values.cargaHoraria,
             remuneracao: values.remuneracao,
-            setor: values.setor
+            setor: values.setor,
+            googleId: props.googleId 
         }).then((response) => {
             console.log("resposta:" + response);
         })
@@ -37,7 +38,7 @@ export default (props) => {
         <>            
             <h5>Nome do evento: </h5>
             <input type="text" name="nomeEvento" onChange={handleChangeValues}/>
-
+            <p>{props.googleId}</p>
             <h5>Data: </h5>
             <input type="text" name="data" onChange={handleChangeValues}/>
 
@@ -58,7 +59,6 @@ export default (props) => {
 
             <br/>
             <button onClick={() => CadastrarEvento()}>Cadastrar</button>
-            <button onClick={() => MostrarEventos()}>Print</button>
         </>
     );
 };

@@ -23,7 +23,6 @@ export default props =>
         
         <div className="Footer">
             <button>Candidatar-se</button>
-            <button>Ver candidatos</button>
         </div>
 
     </div>

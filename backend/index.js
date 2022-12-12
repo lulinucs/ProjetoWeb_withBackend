@@ -39,7 +39,7 @@ app.post("/cadastrousuario", (req, res) => {
     const { sobre }  = req.body;
     const { email }  = req.body;
     const { imageUrl }  = req.body;
-    const { tokenId }  = req.body;
+    const { googleId }  = req.body;
     const { type } = req.body
  
     try {
@@ -50,8 +50,8 @@ app.post("/cadastrousuario", (req, res) => {
     }
 
     const collection = client.db('teste-db').collection('users');
-    collection.insertOne({nome: nome, pronome: pronome, CPF:CPF, nascimento: nascimento, telefone:telefone, sobre:sobre, email:email, imageUrl:imageUrl, tokenId:tokenId, type:type})
-    console.log({nome: nome, pronome: pronome, CPF:CPF, nascimento: nascimento, telefone:telefone, sobre:sobre, email:email, imageUrl:imageUrl, tokenId:tokenId, type:type})
+    collection.insertOne({nome: nome, pronome: pronome, CPF:CPF, nascimento: nascimento, telefone:telefone, sobre:sobre, email:email, imageUrl:imageUrl, googleId:googleId, type:type})
+    console.log({nome: nome, pronome: pronome, CPF:CPF, nascimento: nascimento, telefone:telefone, sobre:sobre, email:email, imageUrl:imageUrl, googleId:googleId, type:type})
 })
 
 app.post("/mostrarusuarios", async (req, res) => {
@@ -78,6 +78,7 @@ app.post("/cadastroevento", (req, res) => {
     const { cargaHoraria }  = req.body;
     const { remuneracao }  = req.body;
     const { setor } = req.body;
+    const { googleId } = req.body;
  
     try {
         const res = client.connect();
@@ -93,14 +94,16 @@ app.post("/cadastroevento", (req, res) => {
                             descricao: descricao, 
                             cargaHoraria:cargaHoraria, 
                             remuneracao: remuneracao,
-                            setor: setor})
+                            setor: setor,
+                            googleId: googleId})
     console.log({nomeEvento: nomeEvento,
                 data: data,
                 horario: horario, 
                 descricao: descricao, 
                 cargaHoraria:cargaHoraria, 
                 remuneracao: remuneracao,
-                setor: setor});
+                setor: setor,
+                googleId: googleId});
 })
 
 app.get("/listaeventos", async (req, res) => {
@@ -114,6 +117,30 @@ app.get("/listacandidatos", async (req, res) => {
     res.send(eventos);
 
 })
+
+app.post("/cadastrar", async (req, res) => {
+
+    try {
+        const res = client.connect();
+        console.log("Conectado")
+    } catch (e) {
+        console.error("erro: "+e)
+    }
+
+    const googleId = req.body.googleId
+    const email = req.body.profileObj.email
+    const givenName = req.body.profileObj.givenName
+    const familyName = req.body.profileObj.familyName
+    const imageUrl = req.body.profileObj.imageUrl
+    
+    const usuarios = client.db('teste-db').collection('users');
+    usuarios.insertOne({googleId:googleId, email:email, givenName:givenName, familyName:familyName, imageUrl:imageUrl})
+    console.log("Usuario "+givenName+" cadastrado!")
+
+
+    res.send(googleId)
+})
+
 
 app.listen(8081, async function(){
     const resultInitDB = await initializeDB();
