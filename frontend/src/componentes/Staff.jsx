@@ -10,5 +10,5 @@ export default (props) => {
 	
 
 	return(
-		<ListaEventos />
+		<ListaEventos  googleId={props.googleId}/>
 	)}

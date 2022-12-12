@@ -15,6 +15,6 @@ export default (props) => {
 		<Card titulo="Cadastrar Evento">
 			<CadastroEventos googleId={props.googleId} />
 		</Card>
-		<ListaMeusEventos googleId={props.googleId} />
+		<ListaMeusEventos googleId={props.googleId} admin={props.admin}/>
 		</>
 	)}

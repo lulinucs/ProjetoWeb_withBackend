@@ -1,6 +1,20 @@
 import './Card.css'
 import './Button.css'
 import React from 'react'
+import Axios from "axios";
+
+
+
+function CandidatarSe(nomeEvento, googleId) {
+    Axios.post("http://localhost:8081/candidatarse", {
+        nomeEvento: nomeEvento,
+        googleId: googleId
+    }).then((response) => {
+        console.log("resposta:" + response);
+
+
+    })
+};
 
 export default props =>
 
@@ -22,7 +36,8 @@ export default props =>
         </div>
         
         <div className="Footer">
-            <button>Candidatar-se</button>
+        {props.admin ? (<button>Ver candidatos</button>) :
+        (<button onClick={() => CandidatarSe(props.nomeEvento, props.googleId)} >Candidatar-se</button>)}
         </div>
 
     </div>

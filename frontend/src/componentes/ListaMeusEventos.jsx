@@ -32,7 +32,7 @@ export default class ListaEventos extends React.Component {
             <h2>Próximos Eventos</h2>
                 {       
                         this.state.meusEventos.map(evento =>  
-                        <CardEvento nomeEvento={evento.nomeEvento} data={evento.data} horario={evento.horario} cargaHoraria={evento.cargaHoraria} remuneracao={evento.remuneracao} setor={evento.setor}>
+                        <CardEvento admin={this.props.admin} nomeEvento={evento.nomeEvento} data={evento.data} horario={evento.horario} cargaHoraria={evento.cargaHoraria} remuneracao={evento.remuneracao} setor={evento.setor}>
                             {evento.descricao}
                         </CardEvento>
                     )

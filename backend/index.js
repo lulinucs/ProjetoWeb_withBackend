@@ -79,6 +79,7 @@ app.post("/cadastroevento", (req, res) => {
     const { remuneracao }  = req.body;
     const { setor } = req.body;
     const { googleId } = req.body;
+
  
     try {
         const res = client.connect();
@@ -88,14 +89,15 @@ app.post("/cadastroevento", (req, res) => {
     }
 
     const collection = client.db('teste-db').collection('events');
-    collection.insertOne({nomeEvento: nomeEvento,
+    collection.insertOne({  nomeEvento: nomeEvento,
                             data: data,
                             horario: horario, 
                             descricao: descricao, 
                             cargaHoraria:cargaHoraria, 
                             remuneracao: remuneracao,
                             setor: setor,
-                            googleId: googleId})
+                            googleId: googleId,
+                            candidatos: []})
     console.log({nomeEvento: nomeEvento,
                 data: data,
                 horario: horario, 
@@ -139,6 +141,24 @@ app.post("/cadastrar", async (req, res) => {
 
 
     res.send(googleId)
+})
+
+app.post("/candidatarse", async (req, res) => {
+    const { nomeEvento }  = req.body;
+    const { googleId } = req.body;
+ 
+    try {
+        const res = client.connect();
+        console.log("Conectado")
+    } catch (e) {
+        console.error("erro: "+e)
+    }
+
+    const eventos = client.db('teste-db').collection('events');
+    console.log(await eventos.updateOne({nomeEvento: nomeEvento}, { $push: {candidatos: googleId} }))
+    console.log("deus ajude")
+    
+    
 })
 
 

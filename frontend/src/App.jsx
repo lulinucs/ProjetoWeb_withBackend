@@ -41,11 +41,15 @@ export default function App() {
 		
 			{googleId != false ? 
 			
-			(admin ? (<Admin googleId={googleId}/>) : (<Staff />)
+			(admin ? (<Admin googleId={googleId} admin={admin}/>) : (<Staff googleId={googleId}/>)
 
 ) : (
 		
 			<Card titulo="Login">
+
+					<input type="checkbox" />
+					<h5>Logar como produtor</h5>
+
 				<GoogleLogin 
 				clientId="37207957043-ecnp4grtj6naao34efml5ml3t4jo3u3p.apps.googleusercontent.com"
 				buttonText="Continuar com o Google"
