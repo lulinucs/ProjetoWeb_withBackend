@@ -52,7 +52,7 @@ export default function App() {
 		
 			{googleId != false ? 
 			
-			(admin ? (<Admin googleId={googleId} admin={admin}/>) : (<Staff googleId={googleId}/>)
+			(admin ? (<Admin googleId={googleId} admin={admin}/>) : (<Staff googleId={googleId} admin={admin}/>)
 
 			) : (
 		

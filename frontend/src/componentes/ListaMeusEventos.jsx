@@ -101,7 +101,14 @@ export default class ListaEventos extends React.Component {
             <h2>Meus Eventos</h2>
                 {       
                         this.state.meusEventos.map(evento =>  
-                        <CardEvento admin={this.props.admin} nomeEvento={evento.nomeEvento} data={evento.data} horario={evento.horario} cargaHoraria={evento.cargaHoraria} remuneracao={evento.remuneracao} setor={evento.setor}>
+                        <CardEvento admin={this.props.admin} 
+                                    nomeEvento={evento.nomeEvento} 
+                                    data={evento.data} 
+                                    horario={evento.horario} 
+                                    cargaHoraria={evento.cargaHoraria} 
+                                    remuneracao={evento.remuneracao} 
+                                    setor={evento.setor}
+                                    candidatos={evento.candidatos}>
                             {evento.descricao}
                             <h5>Candidatos</h5>
                             <ul>

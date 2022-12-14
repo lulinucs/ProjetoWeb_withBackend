@@ -168,7 +168,7 @@ app.post("/candidatarse", async (req, res) => {
     const eventos = client.db('teste-db').collection('events');
     console.log(await eventos.updateOne({nomeEvento: nomeEvento}, { $push: {candidatos: googleId} }))
     console.log("deus ajude")
-    
+    res.send({texto: "sucesso!"})
     
 })
 
