@@ -14,10 +14,60 @@ async function getCandidatos(evento) {
     return lista
 }
 
+async function listaeventos() {
+    const response = await Axios.get("http://localhost:8081/listaeventos")
+    const eventos = response.data
+    const meusEventos = eventos.filter(evento => (evento.googleId == this.props.googleId))
+    console.log("MEUS EVENTOS")
+    console.log(meusEventos)
+    console.log(this.props.googleId)
+    for (const evento of meusEventos) {
+        console.log("EVENTO LOOP: ")
+        console.log(evento)
+        const cands = await getCandidatos(evento);
+        const nomes = cands.lista.map(cand => cand.givenName + " " + cand.familyName)
+        evento.candidatos = nomes;
+    }
+
+    this.setState({meusEventos: meusEventos});
+    console.log("ESTADO: ")
+    console.log(this.state.meusEventos)
+
+    //const lista = await Promise.all(meusEventos.map(async (evento) => await getCandidatos(evento)))
+    //console.log("LISTA EVENTOS:")
+    //console.log(lista)
+    //this.setState({candidatosPorEvento: lista})
+}
+
 export default class ListaEventos extends React.Component {
     state = {
         meusEventos: [],
-        candidatosPorEvento: []
+        candidatosPorEvento: [],
+        update: 0
+    }
+
+    async componentDidUpdate(prevProps) {
+        if (prevProps.valor != this.props.valor) {
+            console.log("update?")
+            const response = await Axios.get("http://localhost:8081/listaeventos")
+            const eventos = response.data
+            const meusEventos = eventos.filter(evento => (evento.googleId == this.props.googleId))
+            console.log("MEUS EVENTOS")
+            console.log(meusEventos)
+            console.log(this.props.googleId)
+            for (const evento of meusEventos) {
+                console.log("EVENTO LOOP: ")
+                console.log(evento)
+                const cands = await getCandidatos(evento);
+                const nomes = cands.lista.map(cand => cand.givenName + " " + cand.familyName)
+                evento.candidatos = nomes;
+            }
+    
+            this.setState({meusEventos: meusEventos});
+            console.log("ESTADO: ")
+            console.log(this.state.meusEventos)
+            console.log("UPDATED")
+        }
     }
 
     async componentDidMount() {
@@ -31,7 +81,7 @@ export default class ListaEventos extends React.Component {
             console.log("EVENTO LOOP: ")
             console.log(evento)
             const cands = await getCandidatos(evento);
-            const nomes = cands.map(cand => cand.givenName + " " + cand.familyName)
+            const nomes = cands.lista.map(cand => cand.givenName + " " + cand.familyName)
             evento.candidatos = nomes;
         }
 
@@ -43,7 +93,6 @@ export default class ListaEventos extends React.Component {
         //console.log("LISTA EVENTOS:")
         //console.log(lista)
         //this.setState({candidatosPorEvento: lista})
-
     }
 
     render() {

@@ -110,6 +110,7 @@ app.post("/cadastroevento", (req, res) => {
                 remuneracao: remuneracao,
                 setor: setor,
                 googleId: googleId});
+    res.send({resposta: true})
 })
 
 app.get("/listaeventos", async (req, res) => {

@@ -11,10 +11,10 @@ export default (props) => {
         }));
     };
 
-    function CadastrarEvento() {
+    async function CadastrarEvento() {
         console.log("ID: ")
         console.log(props.googleId)
-        Axios.post("http://localhost:8081/cadastroevento", {
+        const res = await Axios.post("http://localhost:8081/cadastroevento", {
             nomeEvento: values.nomeEvento,
             data: values.data,
             horario: values.horario,
@@ -23,9 +23,9 @@ export default (props) => {
             remuneracao: values.remuneracao,
             setor: values.setor,
             googleId: props.googleId 
-        }).then((response) => {
-            console.log("resposta:" + response);
-        })
+        });
+        props.updater()
+        console.log("por favor cara")
     };
 
     //Só para debug do DB

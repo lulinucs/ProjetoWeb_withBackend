@@ -9,13 +9,19 @@ import CadastroEventos from './CadastroEventos'
 
 
 export default (props) => {
-	
+	var updater = foiUpdate.bind(this)
+	var [valor, setValor] = useState(0)
+
+	function foiUpdate() {
+		setValor(valor + 1)
+		console.log(valor)
+	}
 
 	return(
 		<>
 		<Card titulo="Cadastrar Evento">
-			<CadastroEventos googleId={props.googleId} />
+			<CadastroEventos googleId={props.googleId} updater={updater} />
 		</Card>
-		<ListaMeusEventos googleId={props.googleId} admin={props.admin}/>
+		<ListaMeusEventos googleId={props.googleId} admin={props.admin} valor={valor}/>
 		</>
 	)}
