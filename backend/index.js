@@ -155,8 +155,9 @@ app.post("/cadastrar", async (req, res) => {
 })
 
 app.post("/candidatarse", async (req, res) => {
-    const { nomeEvento }  = req.body;
+    const { idEvento }  = req.body;
     const { googleId } = req.body;
+    const o_id = new ObjectId(idEvento)
  
     try {
         const res = client.connect();
@@ -166,7 +167,7 @@ app.post("/candidatarse", async (req, res) => {
     }
 
     const eventos = client.db('teste-db').collection('events');
-    console.log(await eventos.updateOne({nomeEvento: nomeEvento}, { $push: {candidatos: googleId} }))
+    console.log(await eventos.updateOne({_id: o_id}, { $push: {candidatos: googleId} }))
     console.log("deus ajude")
     res.send({texto: "sucesso!"})
     

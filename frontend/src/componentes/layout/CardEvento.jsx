@@ -10,9 +10,9 @@ export default  (props) => {
     const [buttonData, setButtonData] = useState(<></>)
     const [apertou, setApertou] = useState(false)
 
-    async function CandidatarSe(nomeEvento, googleId) {
+    async function CandidatarSe(idEvento, googleId) {
         const res = await Axios.post("http://localhost:8081/candidatarse", {
-            nomeEvento: nomeEvento,
+            idEvento: idEvento,
             googleId: googleId
         });
         console.log("resposta:" + res.data.texto);
@@ -27,7 +27,7 @@ export default  (props) => {
             console.log("ESTOU AQUI")
             return <p><i>Você já se candidatou para este evento!</i></p>
         } else {
-            return <button onClick={async () => await CandidatarSe(props.nomeEvento, props.googleId)} >Candidatar-se</button>
+            return <button onClick={async () => await CandidatarSe(props.idEvento, props.googleId)} >Candidatar-se</button>
         }
     }
 
