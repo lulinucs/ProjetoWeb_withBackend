@@ -16,3 +16,8 @@ button {
     background-color: #4CAF50; /* Green */
     color: white;
   }
+
+#delete_button:hover {
+  background-color: red;
+  color: white;
+}

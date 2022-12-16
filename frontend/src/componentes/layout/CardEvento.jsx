@@ -9,8 +9,10 @@ import { useEffect } from 'react';
 export default  (props) => {
     const [buttonData, setButtonData] = useState(<></>)
     const [apertou, setApertou] = useState(false)
+    const [excluiu, setExcluiu] = useState(false) // como esconder card ao excluir?
 
     async function CandidatarSe(idEvento, googleId) {
+        console.log(idEvento);
         const res = await Axios.post("http://localhost:8081/candidatarse", {
             idEvento: idEvento,
             googleId: googleId
@@ -20,6 +22,17 @@ export default  (props) => {
         
     };
 
+    async function Deletar(idEvento) {
+        console.log(idEvento); //ta dando undefined, n ta pegando o idEvento
+        const res = await Axios.post("/excluirevento", {
+            eventoId: idEvento,
+        });
+        if (res.status == 200) {
+            document.getElementsByClassName
+        }
+        return res;
+    }
+
     function estaCandidatado(apertou) {
         if (props.admin) return <></>
         
@@ -27,7 +40,7 @@ export default  (props) => {
             console.log("ESTOU AQUI")
             return <p><i>Você já se candidatou para este evento!</i></p>
         } else {
-            return <button onClick={async () => await CandidatarSe(props.idEvento, props.googleId)} >Candidatar-se</button>
+            return <button onClick={async () => await CandidatarSe(props.idEvento)} >Candidatar-se</button>
         }
     }
 
@@ -56,7 +69,9 @@ export default  (props) => {
         
             <div className="Footer">
                 {buttonData}
+                {props.admin &&
+                    <button id='delete_button' onClick={async () => await Deletar(props.idEvento)}>Excluir evento</button>
+                }
             </div>
-
         </div>
 )}

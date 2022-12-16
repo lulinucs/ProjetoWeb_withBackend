@@ -194,6 +194,18 @@ app.post("/candidatosNoEvento", async (req, res) => {
     res.send({lista: candidatos})
 })
 
+app.delete("/excluirevento", async (req, res) => {
+    console.log("aaaaaa");
+    const id = req.body.eventoId;
+    const o_id = new ObjectId(id);
+    const deleted = await client.db('teste-db').collection('events').deleteOne({_id: o_id});
+    console.log(deleted);
+    if (deleted == 1) {
+        res.sendStatus(200);
+    } else {
+        res.sendStatus(404);
+    }
+})
 
 app.listen(8081, async function(){
     //const resultInitDB = await initializeDB();
