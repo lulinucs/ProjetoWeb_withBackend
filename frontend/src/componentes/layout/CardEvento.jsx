@@ -24,13 +24,15 @@ export default  (props) => {
 
     async function Deletar(idEvento) {
         console.log(idEvento); //ta dando undefined, n ta pegando o idEvento
-        const res = await Axios.post("/excluirevento", {
+        const res = await Axios.post("http://localhost:8081/excluirevento", {
             eventoId: idEvento,
         });
-        if (res.status == 200) {
-            document.getElementsByClassName
+        if (res.data.status == 200) {
+            console.log("sucesso!")
+            props.updateFunc()
+        } else {
+            console.log("cagou")
         }
-        return res;
     }
 
     function estaCandidatado(apertou) {

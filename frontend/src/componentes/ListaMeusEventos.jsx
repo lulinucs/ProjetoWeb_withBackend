@@ -14,63 +14,19 @@ async function getCandidatos(evento) {
     return lista
 }
 
-async function listaeventos() {
-    const response = await Axios.get("http://localhost:8081/listaeventos")
-    const eventos = response.data
-    const meusEventos = eventos.filter(evento => (evento.googleId == this.props.googleId))
-    console.log("MEUS EVENTOS")
-    console.log(meusEventos)
-    console.log(this.props.googleId)
-    for (const evento of meusEventos) {
-        console.log("EVENTO LOOP: ")
-        console.log(evento)
-        const cands = await getCandidatos(evento);
-        const nomes = cands.lista.map(cand => cand.givenName + " " + cand.familyName)
-        evento.candidatos = nomes;
+export default class ListaEventos extends React.Component {    
+    constructor(props) {
+        super(props)
+        this.increaseUpdate = this.increaseUpdate.bind(this)
     }
-
-    this.setState({meusEventos: meusEventos});
-    console.log("ESTADO: ")
-    console.log(this.state.meusEventos)
-
-    //const lista = await Promise.all(meusEventos.map(async (evento) => await getCandidatos(evento)))
-    //console.log("LISTA EVENTOS:")
-    //console.log(lista)
-    //this.setState({candidatosPorEvento: lista})
-}
-
-export default class ListaEventos extends React.Component {
+    
     state = {
         meusEventos: [],
         candidatosPorEvento: [],
-        update: 0
+        updateCount: 0
     }
 
-    async componentDidUpdate(prevProps) {
-        if (prevProps.valor != this.props.valor) {
-            console.log("update?")
-            const response = await Axios.get("http://localhost:8081/listaeventos")
-            const eventos = response.data
-            const meusEventos = eventos.filter(evento => (evento.googleId == this.props.googleId))
-            console.log("MEUS EVENTOS")
-            console.log(meusEventos)
-            console.log(this.props.googleId)
-            for (const evento of meusEventos) {
-                console.log("EVENTO LOOP: ")
-                console.log(evento)
-                const cands = await getCandidatos(evento);
-                const nomes = cands.lista.map(cand => cand.givenName + " " + cand.familyName)
-                evento.candidatos = nomes;
-            }
-    
-            this.setState({meusEventos: meusEventos});
-            console.log("ESTADO: ")
-            console.log(this.state.meusEventos)
-            console.log("UPDATED")
-        }
-    }
-
-    async componentDidMount() {
+    async refresh() {
         const response = await Axios.get("http://localhost:8081/listaeventos")
         const eventos = response.data
         const meusEventos = eventos.filter(evento => (evento.googleId == this.props.googleId))
@@ -84,15 +40,35 @@ export default class ListaEventos extends React.Component {
             const nomes = cands.lista.map(cand => cand.givenName + " " + cand.familyName)
             evento.candidatos = nomes;
         }
-
+        
         this.setState({meusEventos: meusEventos});
         console.log("ESTADO: ")
         console.log(this.state.meusEventos)
 
-        //const lista = await Promise.all(meusEventos.map(async (evento) => await getCandidatos(evento)))
-        //console.log("LISTA EVENTOS:")
-        //console.log(lista)
-        //this.setState({candidatosPorEvento: lista})
+        return true
+    }
+
+
+    increaseUpdate = () => {
+        this.setState((prevState) => ({
+            updateCount: prevState.updateCount + 1
+        }))
+    }
+
+    async componentDidUpdate(prevProps, prevState) {
+        if (prevProps.valor != this.props.valor || prevState.updateCount != this.state.updateCount) {
+            const res = await this.refresh()
+            if (res) {
+                console.log("refresh!")
+            }
+        }
+    }
+
+    async componentDidMount() {
+        const res = await this.refresh()
+        if (res) {
+            console.log("montou!")
+        }
     }
 
     render() {
@@ -108,7 +84,9 @@ export default class ListaEventos extends React.Component {
                                     cargaHoraria={evento.cargaHoraria} 
                                     remuneracao={evento.remuneracao} 
                                     setor={evento.setor}
-                                    candidatos={evento.candidatos}>
+                                    candidatos={evento.candidatos}
+                                    idEvento={evento._id}
+                                    updateFunc={this.increaseUpdate}>
                             {evento.descricao}
                             <h5>Candidatos</h5>
                             <ul>
